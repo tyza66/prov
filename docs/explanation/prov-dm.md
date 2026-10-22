@@ -118,6 +118,10 @@ must be a qualified name. A plain string such as `"prov:Person"` is stored and s
 as that literal string. Under PROV-DM §5.7.2.4 such a string does not denote the
 predefined type.
 
+The three agent subtypes are factories rather than separate classes: `person()`,
+`organization()` and `software_agent()` create the record and assert the `prov:type` in
+one call. The Plan subtype has no factory, so it still goes through `other_attributes`.
+
 ### Component 4: Bundles
 
 PROV-DM defines a **bundle** as "a named set of provenance descriptions, and is itself an
@@ -163,6 +167,8 @@ A collection is an ordinary {py:class}`~prov.model.ProvEntity` carrying the
 `prov:Collection` type, which the `collection()` factory adds for you. PROV-DM's
 `EmptyCollection` is likewise expressed with the `prov:EmptyCollection` type rather than a
 dedicated class.
+
+The `empty_collection()` factory adds that type for you.
 
 ## Qualified names and namespaces
 

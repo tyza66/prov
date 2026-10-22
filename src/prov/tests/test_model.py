@@ -712,6 +712,88 @@ def test_has_bundles_false_for_plain_bundle() -> None:
     assert not b.has_bundles()
 
 
+# The following cover the #260 agent-subtype and empty-collection factories.
+# test_statements.py already round-trips the types they assert through every
+# serializer; what is left here is each factory's contract with the manual
+# idiom the issue documents.
+
+
+@pytest.mark.parametrize(
+    ("factory", "subtype"),
+    [
+        (ProvDocument.person, "Person"),
+        (ProvDocument.organization, "Organization"),
+        (ProvDocument.software_agent, "SoftwareAgent"),
+    ],
+)
+def test_agent_subtype_factory_matches_manual_idiom(factory, subtype) -> None:
+    def build(use_factory: bool) -> ProvDocument:
+        document = ProvDocument()
+        document.add_namespace("ex", EX_URI)
+        if use_factory:
+            factory(document, "ex:a1")
+        else:
+            document.agent("ex:a1", {PROV_TYPE: PROV[subtype]})
+        return document
+
+    assert build(True) == build(False)
+
+
+def test_agent_subtype_factory_merges_other_attributes() -> None:
+    document = ProvDocument()
+    document.add_namespace("ex", EX_URI)
+    ex = Namespace("ex", EX_URI)
+    person = document.person("ex:a1", {"ex:role": "author"})
+
+    assert person.get_asserted_types() == {PROV["Person"]}
+    assert dict(person.attributes)[ex["role"]] == "author"
+
+
+def test_agent_subtype_factory_leaves_an_explicit_type_single() -> None:
+    document = ProvDocument()
+    document.add_namespace("ex", EX_URI)
+    person = document.person("ex:a1", {PROV_TYPE: PROV["Person"]})
+
+    assert person.get_asserted_types() == {PROV["Person"]}
+
+
+def test_empty_collection_factory_matches_manual_idiom() -> None:
+    via_factory = ProvDocument()
+    via_factory.add_namespace("ex", EX_URI)
+    via_factory.empty_collection("ex:c1")
+
+    via_entity = ProvDocument()
+    via_entity.add_namespace("ex", EX_URI)
+    via_entity.entity("ex:c1", {PROV_TYPE: PROV["EmptyCollection"]})
+
+    assert via_factory == via_entity
+
+
+def test_empty_collection_factory_merges_other_attributes() -> None:
+    document = ProvDocument()
+    document.add_namespace("ex", EX_URI)
+    ex = Namespace("ex", EX_URI)
+    collection = document.empty_collection("ex:c1", {"ex:note": "nothing here"})
+
+    assert collection.get_asserted_types() == {PROV["EmptyCollection"]}
+    assert dict(collection.attributes)[ex["note"]] == "nothing here"
+
+
+def test_subtype_factories_work_on_a_plain_bundle() -> None:
+    bundle = ProvBundle()
+    ex = Namespace("ex", EX_URI)
+
+    person = bundle.person(ex["a1"])
+    organization = bundle.organization(ex["a2"])
+    software_agent = bundle.software_agent(ex["a3"])
+    empty_collection = bundle.empty_collection(ex["c1"])
+
+    assert person.get_asserted_types() == {PROV["Person"]}
+    assert organization.get_asserted_types() == {PROV["Organization"]}
+    assert software_agent.get_asserted_types() == {PROV["SoftwareAgent"]}
+    assert empty_collection.get_asserted_types() == {PROV["EmptyCollection"]}
+
+
 # The following cover ProvDocument.serialize()'s file-path save path and
 # .deserialize()'s argument-validation error (planning/test-gap-checklist.md, T13
 # item under model.py, natural neighbours of the T12 read() tests).

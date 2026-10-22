@@ -1191,6 +1191,71 @@ class ProvBundle:
         """
         return self.new_record(PROV_AGENT, identifier, None, other_attributes)  # type: ignore
 
+    def person(
+        self,
+        identifier: QualifiedNameCandidate,
+        other_attributes: RecordAttributesArg | None = None,
+    ) -> ProvAgent:
+        """Create a new person agent and add it to the bundle.
+
+        A person is an agent with an additional ``prov:Person`` type.
+
+        Args:
+            identifier: The identifier for the new person.
+            other_attributes: Optional attributes for the person, as a dict or
+                a list of ``(name, value)`` pairs (default: ``None``).
+
+        Returns:
+            The new :class:`ProvAgent`, typed as a person.
+        """
+        record = self.agent(identifier, other_attributes)
+        record.add_asserted_type(PROV["Person"])
+        return record
+
+    def organization(
+        self,
+        identifier: QualifiedNameCandidate,
+        other_attributes: RecordAttributesArg | None = None,
+    ) -> ProvAgent:
+        """Create a new organization agent and add it to the bundle.
+
+        An organization is an agent with an additional ``prov:Organization``
+        type.
+
+        Args:
+            identifier: The identifier for the new organization.
+            other_attributes: Optional attributes for the organization, as a
+                dict or a list of ``(name, value)`` pairs (default: ``None``).
+
+        Returns:
+            The new :class:`ProvAgent`, typed as an organization.
+        """
+        record = self.agent(identifier, other_attributes)
+        record.add_asserted_type(PROV["Organization"])
+        return record
+
+    def software_agent(
+        self,
+        identifier: QualifiedNameCandidate,
+        other_attributes: RecordAttributesArg | None = None,
+    ) -> ProvAgent:
+        """Create a new software agent and add it to the bundle.
+
+        A software agent is an agent with an additional
+        ``prov:SoftwareAgent`` type.
+
+        Args:
+            identifier: The identifier for the new software agent.
+            other_attributes: Optional attributes for the software agent, as a
+                dict or a list of ``(name, value)`` pairs (default: ``None``).
+
+        Returns:
+            The new :class:`ProvAgent`, typed as a software agent.
+        """
+        record = self.agent(identifier, other_attributes)
+        record.add_asserted_type(PROV["SoftwareAgent"])
+        return record
+
     def attribution(
         self,
         entity: EntityRef,
@@ -1602,6 +1667,29 @@ class ProvBundle:
         """
         record = self.new_record(PROV_ENTITY, identifier, None, other_attributes)
         record.add_asserted_type(PROV["Collection"])
+        return record  # type: ignore
+
+    def empty_collection(
+        self,
+        identifier: QualifiedNameCandidate,
+        other_attributes: RecordAttributesArg | None = None,
+    ) -> ProvEntity:
+        """Create a new empty collection entity and add it to the bundle.
+
+        An empty collection is an entity with an additional
+        ``prov:EmptyCollection`` type, standing for a collection known to hold
+        no members.
+
+        Args:
+            identifier: The identifier for the new empty collection.
+            other_attributes: Optional attributes for the empty collection, as
+                a dict or a list of ``(name, value)`` pairs (default: ``None``).
+
+        Returns:
+            The new :class:`ProvEntity`, typed as an empty collection.
+        """
+        record = self.new_record(PROV_ENTITY, identifier, None, other_attributes)
+        record.add_asserted_type(PROV["EmptyCollection"])
         return record  # type: ignore
 
     def membership(self, collection: EntityRef, entity: EntityRef) -> ProvMembership:

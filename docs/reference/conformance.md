@@ -59,7 +59,7 @@ expresses them: the grammar has no `wasRevisionOf` keyword.
 | Concept (PROV-DM §) | Model class | Factory / alias | PROV-N keyword | JSON | XML | RDF | JSON-LD |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Agent §5.3.1 | {py:class}`~prov.model.ProvAgent` | `agent()` | `agent` | ✓ | ✓ | ✓ | ✓ |
-| Person / Organization / SoftwareAgent §5.3.1 | `prov:type` on {py:class}`~prov.model.ProvAgent` | none, see "Not implemented" | `agent` with `[prov:type='prov:Person']` and so on | ✓ | ✓ | ✓ | ✓ |
+| Person / Organization / SoftwareAgent §5.3.1 | `prov:type` on {py:class}`~prov.model.ProvAgent` | `person()` / `organization()` / `software_agent()` | `agent` with `[prov:type='prov:Person']` and so on | ✓ | ✓ | ✓ | ✓ |
 | Attribution §5.3.2 | {py:class}`~prov.model.ProvAttribution` | `attribution()` / `wasAttributedTo()` | `wasAttributedTo` | ✓ | ✓ | ✓ | ✓ |
 | Association §5.3.3 | {py:class}`~prov.model.ProvAssociation` | `association()` / `wasAssociatedWith()` | `wasAssociatedWith` | ✓ | ✓ | ✓ | ✓ |
 | Plan §5.3.3 | the entity named by `association(plan=...)` | none | none; the plan is the association's third argument | ✓ | ✓ | ✓ | ✓ |
@@ -92,7 +92,7 @@ a prefixed identifier, so the identifier's IRI survives re-reading.
 | Concept (PROV-DM §) | Model class | Factory / alias | PROV-N keyword | JSON | XML | RDF | JSON-LD |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Collection §5.6 | {py:class}`~prov.model.ProvEntity` + `prov:Collection` type | `collection()` | `entity` with `[prov:type='prov:Collection']` | ✓ | ✓ | ✓ | ✓ |
-| EmptyCollection §5.6 | {py:class}`~prov.model.ProvEntity` + `prov:EmptyCollection` type | none, see "Not implemented" | `entity` with `[prov:type='prov:EmptyCollection']` | ✓ | ✓ | ✓ | ✓ |
+| EmptyCollection §5.6 | {py:class}`~prov.model.ProvEntity` + `prov:EmptyCollection` type | `empty_collection()` | `entity` with `[prov:type='prov:EmptyCollection']` | ✓ | ✓ | ✓ | ✓ |
 | Membership §5.6 | {py:class}`~prov.model.ProvMembership` | `membership()` / `hadMember()` | `hadMember` | ✓ | ✓ | ✓ | ✓ |
 
 ## Values and datatypes (PROV-DM §5.7)
@@ -239,8 +239,6 @@ The corpus README names every excluded or differing file with its reason.
 
 - A bundle as a first-class entity of type `prov:Bundle` (PROV-DM §5.4.2), so the provenance
   of a bundle itself cannot be asserted ([#261](https://github.com/trungdong/prov/issues/261)).
-- Factories for the agent subtypes and for `EmptyCollection`; add the `prov:type` through
-  `other_attributes` ([#260](https://github.com/trungdong/prov/issues/260)).
 - PROV-Dictionary ([#129](https://github.com/trungdong/prov/issues/129)).
 - PROV-CONSTRAINTS validation beyond what `unified()` checks ([#62](https://github.com/trungdong/prov/issues/62)).
 

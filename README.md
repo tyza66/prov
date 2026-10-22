@@ -19,6 +19,8 @@ import and export in PROV-N, PROV-JSON, PROV-JSONLD, PROV-XML and PROV-O (RDF).
 
 - In-memory classes for every PROV-DM record type, readable from and printable as
   [PROV-N](https://www.w3.org/TR/prov-n/).
+- Convenience factories for the PROV-DM subtypes: `person()`, `organization()`,
+  `software_agent()` and `empty_collection()`.
 - Serialization to and from [PROV-N](https://www.w3.org/TR/prov-n/),
   [PROV-JSON](https://www.w3.org/submissions/prov-json/),
   [PROV-JSONLD](https://www.w3.org/submissions/prov-jsonld/),

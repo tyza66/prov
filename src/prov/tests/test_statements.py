@@ -264,6 +264,23 @@ def test_entity_10(roundtrip) -> None:
     roundtrip(document)
 
 
+def test_entity_11(roundtrip) -> None:
+    # #260: the empty-collection factory
+    document = new_document()
+    document.empty_collection(EX_NS["e11"])
+    roundtrip(document)
+
+
+def test_entity_12(roundtrip) -> None:
+    document = new_document()
+    a = document.empty_collection(EX_NS["e12"])
+    a.add_attributes([(PROV_LABEL, "empty-collection12")])
+    add_locations(a)
+    add_labels(a)
+    add_further_attributes(a)
+    roundtrip(document)
+
+
 # ACTIVITIES
 def test_activity_1(roundtrip) -> None:
     document = new_document()
@@ -425,6 +442,33 @@ def test_agent_8(roundtrip) -> None:
     a = document.agent(EX_NS["ag8"])
     a.add_attributes([(PROV_LABEL, "agent8")])
     add_types(a)
+    add_locations(a)
+    add_labels(a)
+    add_further_attributes(a)
+    roundtrip(document)
+
+
+def test_agent_9(roundtrip) -> None:
+    # #260: the agent-subtype factories
+    document = new_document()
+    a = document.person(EX_NS["ag9"])
+    a.add_attributes([(PROV_LABEL, "person9")])
+    roundtrip(document)
+
+
+def test_agent_10(roundtrip) -> None:
+    document = new_document()
+    a = document.organization(EX_NS["ag10"])
+    a.add_attributes([(PROV_LABEL, "organization10")])
+    add_locations(a)
+    add_labels(a)
+    roundtrip(document)
+
+
+def test_agent_11(roundtrip) -> None:
+    document = new_document()
+    a = document.software_agent(EX_NS["ag11"])
+    a.add_attributes([(PROV_LABEL, "software-agent11")])
     add_locations(a)
     add_labels(a)
     add_further_attributes(a)
